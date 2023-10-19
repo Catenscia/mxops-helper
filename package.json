@@ -2,7 +2,7 @@
   "name": "mxops-helper",
   "displayName": "mxopsHelper",
   "description": "Extension to help write mxops scenes and execute mxops",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "publisher": "Catenscia",
   "engines": {
     "vscode": "^1.83.0"

@@ -2,8 +2,9 @@
   "name": "mxops-helper",
   "displayName": "mxopsHelper",
   "description": "Extension to help write mxops scenes and execute mxops",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "publisher": "Catenscia",
+  "icon": "./images/logo.png",
   "engines": {
     "vscode": "^1.83.0"
   },
@@ -49,7 +50,6 @@
     "@vscode/test-electron": "^2.3.4",
     "eslint": "^8.50.0",
     "glob": "^10.3.3",
-    "js-yaml": "^4.1.0",
     "mocha": "^10.2.0",
     "typescript": "^5.2.2"
   },
@@ -58,6 +58,8 @@
     "url": "https://github.com/Catenscia/mxops-helper.git"
   },
   "dependencies": {
+    "js-yaml": "^4.1.0",
+    "semver": "^7.5.4",
     "yaml": "^2.3.3"
   }
 }

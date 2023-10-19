@@ -1,0 +1,235 @@
+checks:
+  - label: Success
+    content: {}
+  - label: Transfers
+    content:
+      condition: exact # or included
+      expected_transfers:
+        - sender: %super-swap-sc.address
+          receiver: alice
+          token_identifier: EGLD
+          amount: 49810022
+        - sender: %super-swap-sc.address
+          receiver: alice
+          token_identifier: XMEX-e45d41
+          amount: 789984651
+          nonce: 7895
+steps:
+  - label: EgldTransfer
+    content:
+      sender: bob
+      receiver: alice # you can also directly write a bech32 address here
+      amount: 8798465184981 # integer amount here (for example 1 EGLD = 1000000000000000000)
+  - label: FungibleTransfer
+    content:
+      sender: bob
+      receiver: alice # you can also directly write a bech32 address here
+      token_identifier: MYTOK-a123ec
+      amount: 8798465184981 # integer amount here (for example 1 EGLD = 1000000000000000000)
+  - label: NonFungibleTransfer
+    content:
+      sender: bob
+      receiver: alice # you can also directly write a bech32 address here
+      token_identifier: MTESDT-a123ec
+      nonce: 4
+      amount: 56 # must be 1 for NFT
+  - label: MutliTransfers
+    content:
+      sender: bob
+      receiver: alice # you can also directly write a bech32 address here
+      transfers:
+        - token_identifier: MYSFT-a123ec
+          nonce: 4
+          amount: 56
+        - token_identifier: FUNG-a123ec
+          nonce: 0 # 0 for fungible ESDT
+          amount: 51658496
+  - label: ContractDeploy
+    content:
+      sender: bob
+      wasm_path: path/to/wasm
+      contract_id: my_first_sc
+      gas_limit: 1584000
+      arguments: # optional, if any args must be submitted
+        - 100
+      upgradeable: true
+      readable: false
+      payable: false
+      payable_by_sc: true
+  - label: ContractUpgrade
+    content:
+      sender: bob
+      wasm_path: path/to/wasm
+      contract: my_first_sc # can also directly write a bech32 address here
+      gas_limit: 1584000
+      arguments: # optional, if any args must be submitted
+        - 100
+      upgradeable: true
+      readable: false
+      payable: false
+      payable_by_sc: true
+  - label: ContractCall
+    content:
+      sender: alice
+      contract: my_first_sc # can also directly write a bech32 address here
+      endpoint: myEndPoint
+      gas_limit: 60000000
+      arguments: # optional, if any args must be submitted
+        - arg1
+      value: 0 # optional, integer amount of eGLD to send
+      esdt_transfers: #  optional, ESDTs to send
+        - token_identifier: LKMEX-e45d41
+          nonce: 4
+          amount: 584946
+        - token_identifier: ALICE-123456
+          nonce: 0 # 0 for fungible ESDT
+          amount: 51658496
+      checks: # optional, by default it will contain a transaction success check
+        - type: Success
+  - label: ContractQuery
+    content:
+      contract: my_first_sc # can also directly write a bech32 address here
+      endpoint: myEndPoint
+      gas_limit: getEsdtIdentifier
+      arguments: [] # optional, if any args must be submitted
+      print_results: false # if the query results should be printed in the console
+      expected_results: #  optional, to be provided for all query results if the results are to be saved as Scenario data
+        - save_key: EsdtIdentifier # will be accessible with "%my_first_sc.EsdtIdentifier"
+          result_type: str
+  - label: FungibleIssue
+    content:
+      sender: alice
+      token_name: MyToken #  must be unique within a Scenario
+      token_ticker: MTK
+      initial_supply: 1000000000 # 1,000,000.000 MTK
+      num_decimals: 3
+      can_freeze: false # optional, defaults to false
+      can_wipe: false # optional, defaults to false
+      can_pause: false # optional, defaults to false
+      can_mint: false # optional, defaults to false
+      can_burn: false # optional, defaults to false
+      can_change_owner: false # optional, defaults to false
+      can_upgrade: false # optional, defaults to false
+      can_add_special_roles: false # optional, defaults to false
+  - label: ManageFungibleTokenRoles
+    content:
+      sender: alice
+      token_identifier: MTK-123456
+      target: bob # can also directly write a bech32 address here
+      is_set: true # if false, this will unset the roles provided below
+      roles: # choose one or several of the roles below
+        - ESDTRoleLocalMint
+        - ESDTRoleLocalBurn
+        - ESDTTransferRole
+  - label: FungibleMint
+    content:
+      sender: alice
+      token_identifier: MTK-123456
+      amount: 100000000 # integer amount
+  - label: NonFungibleIssue
+    content:
+      sender: alice
+      token_name: MyNFT #  must be unique within a Scenario
+      token_ticker: MNFT
+      can_freeze: false # optional, defaults to false
+      can_wipe: false # optional, defaults to false
+      can_pause: false # optional, defaults to false
+      can_change_owner: false # optional, defaults to false
+      can_upgrade: false # optional, defaults to false
+      can_add_special_roles: false # optional, defaults to false
+      can_transfer_nft_create_role: false # optional, defaults to false
+  - label: SemiFungibleIssue
+    content:
+      sender: alice
+      token_name: MySFT #  must be unique within a Scenario
+      token_ticker: MSFT
+      can_freeze: false # optional, defaults to false
+      can_wipe: false # optional, defaults to false
+      can_pause: false # optional, defaults to false
+      can_change_owner: false # optional, defaults to false
+      can_upgrade: false # optional, defaults to false
+      can_add_special_roles: false # optional, defaults to false
+      can_transfer_nft_create_role: false # optional, defaults to false
+  - label: MetaIssue
+    content:
+      sender: alice
+      token_name: MyMeta #  must be unique within a Scenario
+      token_ticker: MMT
+      can_freeze: false # optional, defaults to false
+      can_wipe: false # optional, defaults to false
+      can_pause: false # optional, defaults to false
+      can_change_owner: false # optional, defaults to false
+      can_upgrade: false # optional, defaults to false
+      can_add_special_roles: false # optional, defaults to false
+      can_transfer_nft_create_role: false # optional, defaults to false
+  - label: ManageNonFungibleTokenRoles
+    content:
+      sender: alice
+      token_identifier: MNFT-123456
+      target: bob # can also directly write a bech32 address here
+      is_set: true # if false, this will unset the roles provided below
+      roles: # choose one or several of the roles below
+        - ESDTRoleNFTCreate
+        - ESDTRoleNFTBurn
+        - ESDTRoleNFTUpdateAttributes
+        - ESDTRoleNFTAddURI
+        - ESDTTransferRole
+  - label: ManageSemiFungibleTokenRoles
+    content:
+      sender: alice
+      token_identifier: MSFT-123456
+      target: bob # can also directly write a bech32 address here
+      is_set: true # if false, this will unset the roles provided below
+      roles: # choose one or several of the roles below
+        - ESDTRoleNFTCreate
+        - ESDTRoleNFTBurn
+        - ESDTRoleNFTAddQuantity
+        - ESDTTransferRole
+  - label: ManageMetaTokenRoles
+    content:
+      sender: alice
+      token_identifier: MMT-123456
+      target: bob # can also directly write a bech32 address here
+      is_set: true # if false, this will unset the roles provided below
+      roles: # choose one or several of the roles below
+        - ESDTRoleNFTCreate
+        - ESDTRoleNFTBurn
+        - ESDTRoleNFTAddQuantity
+        - ESDTTransferRole
+  - label: NonFungibleMint
+    content:
+      sender: alice
+      token_identifier: MNFT-123456
+      amount: 1 # must be 1 for NFT
+      name: Beautiful NFT # optional
+      royalties: 750 # optional, here it is equals to 7.5%
+      hash: '00' # optional
+      attributes: metadata:ipfsCID/song.json;tags:song,beautiful,music # optional
+      uris: # optional
+        - https://mypng.com/1
+        - https://mysftjpg.com/1
+  - label: Loop
+    content:
+      var_name: VAR_NAME # accessible with "$VAR_NAME"
+      var_start: 1 # mandatory if var_list is not provided
+      var_end: 100 # mandatory if var_list is not provided
+      var_list: # mandatory if var_start & var_end are not provided
+        - 1
+        - 5
+        - 78
+        - 100
+      steps: # add below any steps you want to repeat
+        - type:
+  - label: Python
+    content:
+      module_path: ./folder/my_module.py
+      function: my_function
+      arguments: # optional
+        - arg1
+        - '%my_contract.query_result' # using MxOps value
+      keyword_arguments: # optional
+        key_1: value_1
+        key_2: $VALUE # using os env var
+  - label: Scene
+    content:
+      scene_path: ./path/to/a/scene.yaml

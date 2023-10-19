@@ -1,0 +1,62 @@
+{
+  "name": "mxops-helper",
+  "displayName": "mxopsHelper",
+  "description": "Extension to help write mxops scenes and execute mxops",
+  "version": "0.1.0",
+  "engines": {
+    "vscode": "^1.83.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onLanguage:yaml"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "configuration": {
+      "type": "object",
+      "properties": {
+        "mxopsHelper.pythonLibraryVersion": {
+          "type": "string",
+          "default": "v2.0.0",
+          "description": "Version of the MxOps Python library you're using."
+        },
+        "mxopsHelper.includeComments": {
+          "type": "boolean",
+          "default": true,
+          "description": "If comments should be included in autofill"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/js-yaml": "^4.0.7",
+    "@types/mocha": "^10.0.2",
+    "@types/node": "18.x",
+    "@types/vscode": "^1.83.0",
+    "@typescript-eslint/eslint-plugin": "^6.7.3",
+    "@typescript-eslint/parser": "^6.7.3",
+    "@vscode/test-electron": "^2.3.4",
+    "eslint": "^8.50.0",
+    "glob": "^10.3.3",
+    "js-yaml": "^4.1.0",
+    "mocha": "^10.2.0",
+    "typescript": "^5.2.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Catenscia/mxops-helper.git"
+  },
+  "dependencies": {
+    "yaml": "^2.3.3"
+  }
+}

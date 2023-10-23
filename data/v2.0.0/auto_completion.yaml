@@ -90,12 +90,12 @@ steps:
     content:
       contract: my_first_sc # can also directly write a bech32 address here
       endpoint: myEndPoint
-      gas_limit: getEsdtIdentifier
-      arguments: [] # optional, if any args must be submitted
+      arguments: # optional, if any args must be submitted
+        - arg1
       print_results: false # if the query results should be printed in the console
       expected_results: #  optional, to be provided for all query results if the results are to be saved as Scenario data
-        - save_key: EsdtIdentifier # will be accessible with "%my_first_sc.EsdtIdentifier"
-          result_type: str
+        - save_key: SaveKey # will be accessible with "%my_first_sc.EsdtIdentifier"
+          result_type: str  # or int
   - label: FungibleIssue
     content:
       sender: alice

@@ -64,7 +64,15 @@ function isUnderParentKey(document: vscode.TextDocument, position: vscode.Positi
 	return false;
 }
 
-function nodeToString(node: ParsedNode, includeComments: boolean = true, parentIsSeq: boolean = false): string {
+function removeCommentLines(text: string): string {
+	return text
+		.split('\n')  // Split the text into lines
+		.filter(line => !line.trim().startsWith('#'))  // Filter out lines that start with a '#'
+		.join('\n');  // Join the lines back together
+}
+
+
+function nodeToString(node: ParsedNode, includeComments: boolean = true, parentNodeType: typeof Scalar | typeof YAMLMap | typeof YAMLSeq | null = null): string {
 	if (node instanceof Scalar) {
 		let result = '';
 		if (node.value !== null) {
@@ -82,13 +90,15 @@ function nodeToString(node: ParsedNode, includeComments: boolean = true, parentI
 		let isFirst = true;
 		for (const pair of node.items) {
 			let key = pair.key.toString();
-			if (!isFirst && parentIsSeq) {
+			if (!isFirst && parentNodeType === YAMLSeq) {
 				key = '\t\t' + key;
+			} else if (parentNodeType === YAMLMap) {
+				key = '\t' + key;
 			}
 			const value = pair.value;
 			const comments = includeComments && value?.commentBefore ? `# ${value.commentBefore}\n` : '';
 			if (value instanceof YAMLSeq || value instanceof YAMLMap) {
-				result += `${key}: ${comments || '\n'}${nodeToString(value, includeComments)}`;
+				result += `${key}: ${comments || '\n'}${nodeToString(value, includeComments, YAMLMap)}\n`;
 			} else if (value !== null) {
 				result += `${comments}${key}: ${nodeToString(value, includeComments)}\n`;
 			} else {
@@ -108,7 +118,10 @@ function nodeToString(node: ParsedNode, includeComments: boolean = true, parentI
 			if (includeComments && item.commentBefore) {
 				result += `# ${item.commentBefore}\n`;
 			}
-			result += `\t- ${nodeToString(item, includeComments, true)}\n`;
+			result += `\t- ${nodeToString(item, includeComments, YAMLSeq)}\n`;
+		}
+		if (result.length) {
+			return result.substring(0, result.length - 1);  // remove last line break
 		}
 		return result;
 	} else {
@@ -144,7 +157,7 @@ function createCompletionItemfromYaml(element: ParsedNode, linePrefix: string, i
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-
+	const includeComments = vscode.workspace.getConfiguration('mxopsHelper').get<boolean>('includeComments') ?? true;
 	// fetch the user MxOps version
 	const mxopsVersion = vscode.workspace.getConfiguration('mxopsHelper').get<string>('pythonLibraryVersion');
 	if (mxopsVersion === undefined) {
@@ -170,13 +183,16 @@ export function activate(context: vscode.ExtensionContext) {
 	}
 
 	// load the default configuration
-	const defaultConfig = loadDefaultConfig(dataPath);
+	let defaultConfigString = loadDefaultConfig(dataPath);
+	if (!includeComments) {
+		defaultConfigString = removeCommentLines(defaultConfigString);
+	}
 	let configDisposable = vscode.workspace.onDidChangeTextDocument(event => {
 		const doc = event.document;
 		const content = doc.getText();
 		if (content.trim() === 'mxops') {
 			const edit = new vscode.WorkspaceEdit();
-			edit.replace(doc.uri, new vscode.Range(doc.positionAt(0), doc.positionAt(content.length)), defaultConfig);
+			edit.replace(doc.uri, new vscode.Range(doc.positionAt(0), doc.positionAt(content.length)), defaultConfigString);
 			vscode.workspace.applyEdit(edit);
 		}
 	});
@@ -191,7 +207,6 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.window.showErrorMessage(message);
 		return undefined;
 	}
-	const includeComments = vscode.workspace.getConfiguration('mxopsHelper').get<boolean>('includeComments') ?? true;
 
 	const completionProvider: vscode.CompletionItemProvider = {
 		provideCompletionItems(document: vscode.TextDocument, position: vscode.Position) {

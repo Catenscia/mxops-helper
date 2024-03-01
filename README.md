@@ -22,6 +22,27 @@ This extension has the following settings that you can modify as you need:
 
 ## Release Notes
 
-### 1.0.0
+### 0.3.0
 
-Initial release of `mxops-helper`
+Support for `MxOps` v2.1.0
+
+### 0.2.4
+
+Add optional comments for the base config
+Fix wrong ContractQueryStep definition
+
+### 0.2.3
+
+Fix broken images
+
+### 0.2.2
+
+Fix missing dependencies
+
+### 0.2.0
+
+Support for `MxOps` v2.0.0
+
+### 0.1.0
+
+Initial version of `mxops-helper`

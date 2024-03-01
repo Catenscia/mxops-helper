@@ -1,0 +1,32 @@
+# List of network onto which this scene can be run
+allowed_networks:
+    - devnet
+    - localnet
+
+# List of scenario into which this scene can be run
+# Regex can be used. For example ".*" allows all scenario.
+allowed_scenario:
+    - "<scenario_name_or_regex>"
+    - "<scenario_name_or_regex>"
+
+# List of the accounts that will be used in this scene or in other scenes later scenes. This means that
+# if you execute a folder of scenes for example, you only need to define the accounts in the first executed scene.
+# Names have to be unique or they will override each other
+accounts:
+  - account_name: dev_account
+    pem_path: ./wallets/my_dev_wallet.pem
+  - account_name: real_account 
+    ledger_account_index: 0
+    ledger_address_index: 0
+
+# External contracts that you may want to call in futur steps
+external_contracts:
+  egld_wrapper: erd1qqqqqqqqqqqqqpgqhe8t5jewej70zupmh44jurgn29psua5l2jps3ntjj3 
+  xexchange_router: 
+    - address: erd1qqqqqqqqqqqqqpgqq66xk9gfr4esuhem3jru86wg5hvp33a62jps2fy57p
+    - abi_path: path/to/contractabi.abi.json  # if you have the abi of the contract
+
+# List of the steps to execute in this scene
+# Begin writing "- type:" to activate auto completion and step suggestions.
+steps:
+  - 

@@ -76,7 +76,14 @@ function nodeToString(node: ParsedNode, includeComments: boolean = true, parentN
 	if (node instanceof Scalar) {
 		let result = '';
 		if (node.value !== null) {
-			result += node.value as string;
+			// Check the scalar type to preserve quotes
+			if (node.type === 'QUOTE_DOUBLE') {
+				result += `"${node.value}"`; // Add double quotes
+			} else if (node.type === 'QUOTE_SINGLE') {
+				result += `'${node.value}'`; // Add single quotes
+			} else {
+				result += node.value as string; // Plain scalar, no quotes
+			}
 		}
 		if (includeComments && node.commentBefore) {
 			result = `# ${node.commentBefore}\n${result}`;

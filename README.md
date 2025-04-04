@@ -19,8 +19,13 @@ For now, `mxops-helper` has only two auto-fill features:
 This extension has the following settings that you can modify as you need:
 
 * `mxopsHelper.pythonLibraryVersion`: Version of the MxOps Python library you're using.
+* `mxopsHelper.includeComments`: if the comments should be included when auto-completing templates (scene, step, check)
 
 ## Release Notes
+
+### 0.4.0
+
+Support for `MxOps` v3.0.0
 
 ### 0.3.0
 

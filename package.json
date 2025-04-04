@@ -2,7 +2,7 @@
   "name": "mxops-helper",
   "displayName": "mxopsHelper",
   "description": "Extension to help write mxops scenes and execute mxops",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "publisher": "Catenscia",
   "icon": "./images/logo.png",
   "engines": {

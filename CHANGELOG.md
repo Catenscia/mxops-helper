@@ -2,7 +2,7 @@
 
 All notable changes to the "mxops-helper" extension will be documented in this file.
 
-## v0.4.0 - 2025-04-04
+## v0.9.0 - 2025-04-08
 
 ### Added
 

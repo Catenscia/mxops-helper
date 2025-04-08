@@ -23,7 +23,9 @@ This extension has the following settings that you can modify as you need:
 
 ## Release Notes
 
-### 0.4.0
+### 0.9.0
+
+> version gap due publishing issue with conflicting ids on the marketplace
 
 Support for `MxOps` v3.0.0
 
